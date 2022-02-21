@@ -15,12 +15,8 @@ char * concat(const char * a, int sizeContent, const char * b, int sizechunk){
     char * con = (char *) malloc (lena+lenb);
 
     // copy & concat (including string termination)
-    if(a == "") {
-        memcpy(con, a, lena);
-    }
-    else {
-        memcpy(con + lena, b,lenb);
-    }
+    memcpy(con, a, lena);
+    memcpy(con + lena, b,lenb);
     return con;
 }
 
