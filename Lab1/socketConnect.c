@@ -3,8 +3,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <WinSock2.h>
-
-char * concat(const char * a, int sizeContent, const char * b, int sizechunk){
+char * concatChunk(const char * a, int sizeContent, const char * b, int sizechunk){
 
     int lena = sizeContent;
     int lenb = sizechunk;
@@ -18,15 +17,7 @@ char * concat(const char * a, int sizeContent, const char * b, int sizechunk){
     return con;
 }
 
-int find(const char* source, int sourseSize) {
-    for(int i = 0; i < sourseSize; i++) {
-        if(source[i] == '\r' && source[i + 1] == '\n' &&
-        source[i + 2] == '\r' && source[i + 3] == '\n')
-            return i;
-    }
-}
-
-void socketConnect() {
+int socketConnectWebsite() {
     WSADATA WinSockData;
     int WsaStartup;
     int WsaCleanup;
@@ -43,9 +34,16 @@ void socketConnect() {
     char RecvBuffer[BufferLength];
 
     int Send;
-    char* SendBuffer = "GET /slide/large/2.jpg HTTP/1.1\r\n"
+    char* SendBuffer = "GET / HTTP/1.1\r\n"
                        "Host: me.utm.md\r\n"
-                       "\r\n";
+                       "Accept: text/html\r\n"
+                       "Connection: keep-alive\r\n"
+                       "Keep-Alive: timeout=1, max=1000\r\n"
+                       "Accept-Language: ro,en\r\n"
+                       "Allow: GET\r\n"
+                       "DNT: 1\r\n"
+                       "Save-Data: on"
+                       "\r\n\r\n";
     int SendBufferLen = strlen(SendBuffer) + 1;
 
     FILE* file;
@@ -92,7 +90,7 @@ void socketConnect() {
 
             printf("Bytes received: %d\n", Recv);
 
-            content = concat(content, bytesRecvCounter, RecvBuffer, Recv); // aici transmitem marimea numaidecit
+            content = concatChunk(content, bytesRecvCounter, RecvBuffer, Recv); // aici transmitem marimea numaidecit
 
             //prin strlen daca se intilneste NULL byte(ce tine de binary data probabilitatea e destul de mare) atunci va fi gresita marimea
 
@@ -104,20 +102,15 @@ void socketConnect() {
             printf("recv failed: %d\n", WSAGetLastError());
         }
     } while( Recv > 0 );
-    int splitIndex = find(content, bytesRecvCounter);
     printf("\n");
     printf("Data received successfully\n");
 
-    gettimeofday(&timestamp, NULL);
-    char time[255];
-    sprintf(time, "%lu", timestamp.tv_sec * 1000000 + timestamp.tv_usec);
-
-    file = fopen("D:\\Cora\\univer\\SemVII\\PR\\image1.jpg", "wb");
+    file = fopen("D:\\Cora\\univer\\SemVII\\PR\\content.txt", "wb");
     if (file == NULL) {
         perror("\n\n\n\n\nFailed to open file\n\n\n\n\n");
         exit(0);
     }
-    fwrite(content + splitIndex + 4, 1, bytesRecvCounter, file);
+    fwrite(content, 1, bytesRecvCounter, file);
     fflush(file);
     fclose(file);
 
@@ -133,8 +126,5 @@ void socketConnect() {
         printf("Cleanup failed\n");
     }
     printf("Successful cleanup\n");
+    return bytesRecvCounter;
 }
-
-
-
-
