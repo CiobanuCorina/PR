@@ -192,6 +192,10 @@ public class AppUI {
 
             JButton chooseFile = new JButton("Choose file");
             chooseFile.setBounds(100, 450, 100, 30);
+            JLabel filePath = new JLabel();
+            filePath.setBounds(210, 445, 500, 50);
+            emailCreatePanel.add(filePath);
+
             chooseFile.addActionListener(e -> {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Choose Your File");
@@ -199,6 +203,9 @@ public class AppUI {
                 if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION)
                 {
                     fileAttachment = fileChooser.getSelectedFile();
+                }
+                if(fileAttachment != null) {
+                    filePath.setText(fileAttachment.getPath());
                 }
             });
             emailCreatePanel.add(chooseFile);
