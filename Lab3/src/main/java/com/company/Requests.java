@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Requests {
-    Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("88.159.152.98", 80));
+    Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("200.26.190.74", 999));
 
     public HttpURLConnection setConnectionProperties(String requestMethod, URL url) throws IOException {
         HttpURLConnection con = (HttpURLConnection) url.openConnection(proxy);

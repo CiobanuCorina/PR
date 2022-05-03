@@ -4,12 +4,11 @@ package com.company;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
 
 public class Authenticate {
-    URL url = new URL("https://m.facebook.com/login/async/?refsrc=https%3A%2F%2Fm.facebook.com%2F&lwv=100");
+    URL url = new URL("https://andys.md/ru/login");
 
 
     public Authenticate() throws MalformedURLException {
@@ -28,7 +27,7 @@ public class Authenticate {
         String email = scanner.nextLine();
         System.out.println("Enter password:");
         String password = scanner.nextLine();
-        String jsonInputString = "{\"email\": \"" + email + "\", \"pass\": \"" + password + "\"}";
+        String jsonInputString = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
         OutputStream os = con.getOutputStream();
         os.write(jsonInputString.getBytes(StandardCharsets.UTF_8));
         os.close();
